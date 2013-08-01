@@ -690,15 +690,17 @@ for n=startPhase:length(allPhases)
             p.pertAmp = t_amp * ones(1, p.pertFieldN);
             p.pertPhi = t_angle * ones(1, p.pertFieldN);
             gen_fmt_pert_pcf(t_amp, t_angle, pcf_fn);
-        else
+        elseif ~isequal(thisphase, 'rand')
             p.bShift = 0;
             p.pertAmp = zeros(1, p.pertFieldN);
             p.pertPhi = zeros(1, p.pertFieldN);
             gen_fmt_pert_pcf(0, 0, pcf_fn);
         end
         
-        check_file(pcf_fn);
-        AudapterIO('pcf', pcf_fn);
+        if ~isequal(thisphase, 'rand')
+            check_file(pcf_fn);
+            AudapterIO('pcf', pcf_fn);
+        end
         
 		if ~bAO
             AudapterIO('init',p);  %SC Inject p to Audapter
@@ -748,7 +750,7 @@ for n=startPhase:length(allPhases)
                 
                 gen_fmt_pert_pcf(p.pertAmp(1), t_angle, pcf);
                 check_file(pcf);
-                AudapterIO('pcf', pcf_fn);                                    
+                AudapterIO('pcf', pcf);                    
             end
 
 			hgui.trialType=thisTrial;
