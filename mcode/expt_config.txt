@@ -1,9 +1,9 @@
-SUBJECT_ID      TS_20130730_4
+SUBJECT_ID      TS_20130731_1
 SUBJECT_GENDER  male
 SUBJECT_DOB     1-JAN-1983
 SUBJECT_GROUP	CWS
 
-DATA_DIR        C:\Users\UCUSER\DATA\RHJ
+DATA_DIR        C:\Users\UCUSER\DATA\APE_FMT
 
 SHOW_KIDS_ANIM      0    % 0 (no) or 1 (yes)
 
@@ -23,12 +23,10 @@ SPL_RANGE       8       % Unit: dB A SPL: single-sided width
 VOWEL_LEN_TARG  0.40     % sec 
 VOWEL_LEN_RANGE 0.10     % sec: single-sided width
 
-% PRE_WORDS	  BED HEAD TED		% Words for pre, pract1 and pract2 phases
-% RAND_WORDS   BED HEAD TED       % Random-phase words
-% SUST_WORDS    BED HEAD TED       % Sustained-phase words
-PRE_WORDS	  PEP PEB BEP BEB		% Words for pre, pract1 and pract2 phases
-RAND_WORDS	  PEP PEB BEP BEB		% Random-phase words
-SUST_WORDS	  PEP PEB BEP BEB		% Sustained-phase words
+PRE_WORDS	  BED HEAD TED		% Words for pre, pract1 and pract2 phases
+RAND_WORDS   BED HEAD TED       % Random-phase words
+SUST_WORDS    BED HEAD TED       % Sustained-phase words
+
 
 % PRE_REPS   	2       % Natural production of the VID words
 % PRACT1_REPS     4       % Volume (loudness) practice
@@ -37,7 +35,7 @@ PRE_REPS   	1       % 2: Natural production of the VID words
 PRACT1_REPS     1       % 5: Volume (loudness) practice
 PRACT2_REPS     1       % 5: Speed practice
 
-RAND_BLOCKS 						0	 	% Number of blocks in the random phase
+RAND_BLOCKS                         10	 	% Number of blocks in the random phase
 RAND_TRIALS_PER_BLOCK 		9		% Number of trials in each random block
 RAND_LOWER_TRIALS_PER_BLOCK 1 % Number of "lower" trials in each random block
 RAND_HIGHER_TRIALS_PER_BLOCK 1 % Number of "higher" trials in each random block

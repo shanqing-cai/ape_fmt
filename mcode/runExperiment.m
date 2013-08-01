@@ -123,10 +123,10 @@ if bNew % set up new experiment
     
 	expt.subject=subject;
     
-%     expt.allPhases={'pre', 'pract1', 'pract2', 'rand', 'start', 'ramp','stay','end'};
-%     expt.recPhases={'pre', 'pract1', 'pract2', 'rand', 'start', 'ramp','stay','end'}; %SC The pahses during which the data are recorded
-    expt.allPhases={'pre', 'pract1', 'pract2', 'start', 'ramp','stay','end'};
-    expt.recPhases={'pre', 'pract1', 'pract2', 'start', 'ramp','stay','end'}; %SC The pahses during which the data are recorded
+    expt.allPhases={'pre', 'pract1', 'pract2', 'rand', 'start', 'ramp','stay','end'};
+    expt.recPhases={'pre', 'pract1', 'pract2', 'rand', 'start', 'ramp','stay','end'}; %SC The pahses during which the data are recorded
+%     expt.allPhases={'pre', 'pract1', 'pract2', 'start', 'ramp','stay','end'};
+%     expt.recPhases={'pre', 'pract1', 'pract2', 'start', 'ramp','stay','end'}; %SC The pahses during which the data are recorded
     
     if isfield(expt_config,'NATURAL_REPS') && isfield(expt_config,'NATURAL_WORDS') && ...
         ~isempty(expt_config.NATURAL_REPS) && ~isempty(expt_config.NATURAL_WORDS) && ...
@@ -138,9 +138,8 @@ if bNew % set up new experiment
     expt.preWords = expt_config.PRE_WORDS;
     expt.pract1Words = expt.preWords;
     expt.pract2Words = expt.preWords;
-%     expt.randWords = expt_config.RAND_WORDS;	% 3 3-letters, 5 4-letters
+    expt.randWords = expt_config.RAND_WORDS;	% 3 3-letters, 5 4-letters
     expt.sustWords = expt_config.SUST_WORDS;
-% 	expt.pseudoWords=[];
     
     if isequal(expt.allPhases{1},'natural')
         expt.naturalWords=expt_config.NATURAL_WORDS;
@@ -152,6 +151,11 @@ if bNew % set up new experiment
     expt.script.pre.nReps = expt_config.PRE_REPS;    %SC Numbers of repetitions in the stages   % !!1!!	
     expt.script.pract1.nReps = expt_config.PRACT1_REPS; %SC Default 2   %SC-Mod(09/26/2007)        % !!1!!
     expt.script.pract2.nReps = expt_config.PRACT2_REPS; %SC Default 2   %SC-Mod(09/26/2007)        % !!1!!
+    
+    expt.script.rand.nBlocks = expt_config.RAND_BLOCKS;  %SC Default 10   %SC-Mod(09/26/2007)       % !!8!!
+    expt.script.rand.trialsPerBlock = expt_config.RAND_TRIALS_PER_BLOCK; 
+    expt.script.rand.trialsPerBlock_lower = expt_config.RAND_LOWER_TRIALS_PER_BLOCK;
+    expt.script.rand.trialsPerBlock_higher = expt_config.RAND_HIGHER_TRIALS_PER_BLOCK;
     
     expt.script.start.nReps = expt_config.SUST_START_REPS;   %SC Default 15   %SC-Mod(09/26/2007)       % !!2!!
     expt.script.ramp.nReps = expt_config.SUST_RAMP_REPS;   %SC Default 15   %SC-Mod(09/26/2007)       % !!2!!
@@ -177,10 +181,10 @@ if bNew % set up new experiment
     expt.script.pract2 = genPhaseScript('pract2', ...
                                         expt.script.pract2.nReps, expt.pract2Words);
     
-%     fprintf('Generating script for the random-perturbation phase...\n');
-%     expt.script.rand = genRandScript(expt.script.rand.nBlocks, expt.script.rand.trialsPerBlock, ...
-%                                      expt.script.rand.trialsPerBlock_lower, expt.script.rand.trialsPerBlock_higher, ...
-%                                      expt.randWords);
+    fprintf('Generating script for the random-perturbation phase...\n');
+    expt.script.rand = genRandScript(expt.script.rand.nBlocks, expt.script.rand.trialsPerBlock, ...
+                                     expt.script.rand.trialsPerBlock_lower, expt.script.rand.trialsPerBlock_higher, ...
+                                     expt.randWords);
 	fprintf('Done.\n');
                                     
     t_phases = {'start', 'ramp', 'stay', 'end'};
@@ -594,8 +598,6 @@ for n=startPhase:length(allPhases)
             set(hgui.play,'cdata',hgui.skin.play,'userdata',0);
             hgui.showTextCue=1;
             
-
-            
         case 'ramp'             %SC !! Notice that adaptive RMS threshold updating is no longer done here.           			
             hgui.showRmsPrompt = 1;
             hgui.showSpeedPrompt = 1;
@@ -708,34 +710,45 @@ for n=startPhase:length(allPhases)
 		% --- ~Perturbation field ---
 
         for k=1:nTrials
-            thisTrial=expt.script.(thisphase).(repString).trialOrder(k); % 0: silent; 1: no noise; 2: noise only; 			
-            thisWord=expt.script.(thisphase).(repString).word{k};     %SC Retrieve the word from the randomly shuffled list
+            thisTrial = expt.script.(thisphase).(repString).trialOrder(k); % 0: silent; 1: no noise; 2: noise only; 			
+            thisWord = expt.script.(thisphase).(repString).word{k};     %SC Retrieve the word from the randomly shuffled list
 
+            
             if isequal(thisphase, 'rand')   % Configure random perturbation
                 thispert = expt.script.(thisphase).(repString).pertType(k);
                 if thispert == 1 % Upward perturbation                    
                     p.pertAmp = norm([subject.expt_config.SHIFT_RATIO_RAND_HIGHER_F1, ...
                                       subject.expt_config.SHIFT_RATIO_RAND_HIGHER_F2]) * ...
                                 ones(1, p.pertFieldN);
-                    t_angle =  atan2(subject.expt_config.SHIFT_RATIO_RAND_HIGHER_F2, ...
-                                     subject.expt_config.SHIFT_RATIO_RAND_HIGHER_F1);
+                    t_angle =  angle(subject.expt_config.SHIFT_RATIO_RAND_HIGHER_F1 + ...
+                                     i * subject.expt_config.SHIFT_RATIO_RAND_HIGHER_F2);
                     p.pertPhi = t_angle * ones(1, p.pertFieldN);
                     p.bShift = 1;
+                    
+                    pcf = fullfile(subsubdirname,['trial-', num2str(k), '-', num2str(thisTrial), '_up.pcf']);
                 elseif thispert == -1 % Downward perturbation
                     p.pertAmp = norm([subject.expt_config.SHIFT_RATIO_RAND_LOWER_F1, ...
                                       subject.expt_config.SHIFT_RATIO_RAND_LOWER_F2]) * ...
                                 ones(1, p.pertFieldN);
-                    t_angle =  atan2(subject.expt_config.SHIFT_RATIO_RAND_LOWER_F2, ...
-                                     subject.expt_config.SHIFT_RATIO_RAND_LOWER_F1);
+                    t_angle =  angle(subject.expt_config.SHIFT_RATIO_RAND_LOWER_F1 + ...
+                                     i * subject.expt_config.SHIFT_RATIO_RAND_LOWER_F2);
                     p.pertPhi = t_angle * ones(1, p.pertFieldN);
                     p.bShift = 1;
+                    
+                    pcf = fullfile(subsubdirname,['trial-', num2str(k), '-', num2str(thisTrial), '_dn.pcf']);
                 else % No perturbation
                     p.pertAmp = zeros(1, p.pertFieldN);
                     p.pertPhi = zeros(1, p.pertFieldN);
                     p.bShift = 0;
-                end
+                    
+                    pcf = fullfile(subsubdirname,['trial-', num2str(k), '-', num2str(thisTrial), '_np.pcf']);
+                end                               
                 
-                AudapterIO('init',p);
+                AudapterIO('init', p);
+                
+                gen_fmt_pert_pcf(p.pertAmp(1), t_angle, pcf);
+                check_file(pcf);
+                AudapterIO('pcf', pcf_fn);                                    
             end
 
 			hgui.trialType=thisTrial;
