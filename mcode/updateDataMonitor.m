@@ -41,7 +41,7 @@ if (~isnan(i1) && ~isnan(i2) && ~isempty(i1) && ~isempty(i2) && k2 >= k1)
 	set(gcf,'CurrentAxes',handles.figIdDat(2));
 	xs=get(gca,'XLim'); ys=get(gca,'YLim');
     
-    load('../../signals/leveltest/micRMS_100dBA.mat');  % Gives micRMS_100dBA: the rms the microphone should read when the sound is at 100 dBA SPL
+    load('micRMS_100dBA.mat');  % Gives micRMS_100dBA: the rms the microphone should read when the sound is at 100 dBA SPL
 %     text(xs(1)+0.05*range(xs),ys(2)-0.1*range(ys),['RMS(In)=',num2str(tRMSIn)]);
 %     text(xs(1)+0.05*range(xs),ys(2)-0.2*range(ys),...
 %         ['soundLevel=',num2str(100+20*log10((rmsTrans/micRMS_100dBA))),' dBA SPL'],'FontSize',11);

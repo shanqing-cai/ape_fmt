@@ -378,7 +378,7 @@ handles.showTextCue=0;  %SC(2008/01/06)
 handles.dBRange=NaN;
 handles.rmsTransTarg_spl=NaN;
 % load calibMic;  % gets micGain: wav rms/ Pa rms (Pa^-1)
-load('../../signals/leveltest/micRMS_100dBA.mat');  % Gives micRMS_100dBA: the rms the microphone should read when the sound is at 100 dBA SPL
+load('micRMS_100dBA.mat');  % Gives micRMS_100dBA: the rms the microphone should read when the sound is at 100 dBA SPL
 handles.rmsTransTarg=micRMS_100dBA / (10^((100-handles.rmsTransTarg_spl)/20));
 
 handles.nextMessage=imread(fullfile(handles.msgImgDir,'message_pre2.bmp'));
@@ -703,7 +703,7 @@ end
 
 dataOut.params.dScale=handles.dScale;
 %         load calibMic;  % gets micGain: wav rms/ Pa rms (Pa^-1)
-load('../../signals/leveltest/micRMS_100dBA.mat');
+load('micRMS_100dBA.mat');
 dataOut.vowelLevel = 100+20*log10((rmsTrans/micRMS_100dBA));
 
 

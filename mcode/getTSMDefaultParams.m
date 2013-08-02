@@ -112,7 +112,7 @@ p.rampLen=0.25; %SC(2008/06/22)
 p.bRMSClip=1;
 % p.rmsClipThresh=1.0;
 
-load('../../signals/leveltest/micRMS_100dBA.mat');
+load('micRMS_100dBA.mat');
 p.rmsClipThresh=micRMS_100dBA / (10^((100-100)/20));	% 100 dB maximum input level
 
 p.bPitchShift = 0;
