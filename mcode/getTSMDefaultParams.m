@@ -1,7 +1,7 @@
 function p = getTSMDefaultParams(sex,varargin)
 switch sex
-    case 'male'
-        p.nLPC          = 17; 
+    case 'male'       
+        p.nLPC          = 17;
         p.fn1           = 591;
         p.fn2           = 1314;
     case 'female'
@@ -42,6 +42,8 @@ p.sr            = 48000 / p.downFact;
 if ~isempty(fsic(varargin,'sr'))
     p.sr=varargin{fsic(varargin,'sr')+1};
 end
+
+p.nLPC = round((p.nLPC / 16e3 * p.sr / 2 - 0.5)) * 2 + 1;
 
 % Frame structure
 p.nWin          = 1;% 1 2 4  8 16 32 64 (max=p.framLen) Number of windows per frame  !!
