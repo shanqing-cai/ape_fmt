@@ -7,6 +7,8 @@ toPrompt=0; % set to 1 when necessary during debugging
 switch(action)
     case 'init',
         p=params;
+        
+        Audapter(3, 'srate', p.downFact);
   
         Audapter(3,'srate',p.sr, toPrompt);
         Audapter(3,'framelen',p.frameLen, toPrompt);

@@ -47,8 +47,8 @@ fs = data.params.sr;
 
 sigIn = data.signalIn;
 
-sigIn = resample(sigIn, data.params.sr * data.params.downfact, fs);
-sigInCell = makecell(sigIn, data.params.frameLen * data.params.downfact);
+sigIn = resample(sigIn, data.params.sr * data.params.downFact, fs);
+sigInCell = makecell(sigIn, data.params.frameLen * data.params.downFact);
 
 Audapter(6);   % Reset;\
 

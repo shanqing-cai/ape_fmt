@@ -16,8 +16,15 @@ p.aFact         = 1;
 p.bFact         = 0.8;
 p.gFact         = 1;
 
-% p.downfact      = 4;
-p.downfact      = 3;
+if isequal(getHostName(), 'SHS-NAMBLABNEW')
+    p.downFact      = 4;
+    p.frameLen      = 64 / p.downFact;% must be a valid DMA Buffer size (64 128 256 ..)
+    Audapter('deviceName', 'M-Audio Delta');
+else
+    p.downFact      = 3;
+    p.frameLen      = 96 / p.downFact;% must be a valid DMA Buffer size (64 128 256 ..)
+end
+
 if ~isempty(fsic(varargin,'downFact'))
     p.downfact=varargin{fsic(varargin,'downFact')+1};
 end
@@ -31,7 +38,7 @@ end
 p.dScale        = 10 ^ ((p.closedLoopGain - calcClosedLoopGain) / 20);
 p.preempFact    = 0.98;% preemp factor
 
-p.sr            = 48000 / p.downfact;
+p.sr            = 48000 / p.downFact;
 if ~isempty(fsic(varargin,'sr'))
     p.sr=varargin{fsic(varargin,'sr')+1};
 end
@@ -39,7 +46,7 @@ end
 % Frame structure
 p.nWin          = 1;% 1 2 4  8 16 32 64 (max=p.framLen) Number of windows per frame  !!
 
-p.frameLen      = 96 / p.downfact;% must be a valid DMA Buffer size (64 128 256 ..)
+
 if ~isempty(fsic(varargin,'frameLen'))
     p.frameLen=varargin{fsic(varargin,'frameLen')+1};
 end
