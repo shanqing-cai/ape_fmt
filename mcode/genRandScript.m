@@ -4,20 +4,24 @@ phaseScript.nReps = nBlocks;
 phaseScript.nTrials = 0;
 
 
+if trialsPerBlock < length(words) * 3
+    error('trialsPerBlock should be at least 3 * length(words) = 3 * %d = %d', ...
+          length(words), 3 * length(words));
+end
 
 for n=1 : nBlocks
     wordsUsed = {};
     while (length(wordsUsed) < trialsPerBlock)
         nToGo = trialsPerBlock - length(wordsUsed);
         if (nToGo >= length(words))
-            wordsUsed = [wordsUsed, words];
+            wordsUsed = [wordsUsed, words(randperm(length(words)))];
         elseif (nToGo > 0)
             idx = randperm(length(words));
-            wordsUsed = [wordsUsed, words(idx(1 : nToGo))];
+            wordsUsed = [wordsUsed, words(randperm(nToGo))];
         end
     end
     
-    wordsUsed = wordsUsed(randperm(length(wordsUsed)));
+%     wordsUsed = wordsUsed(randperm(length(wordsUsed)));
     bt = zeros(1, length(wordsUsed));
     
 %     pseudoWordsUsed=pseudoWords(randperm(length(pseudoWords)));
@@ -77,11 +81,17 @@ for i1 = 1 : nBlocks
     end
     
     bOkay = 0;
+    iterCnt = 0;
     while bOkay == 0
         idx_perts = idx_word(randperm(length(idx_word)));
         if abs(idx_perts(1) - idx_perts(2)) > 2
             bOkay = 1;
         else
+            pause(0);
+        end
+        
+        iterCnt = iterCnt + 1;
+        if iterCnt >= 10
             pause(0);
         end
     end
