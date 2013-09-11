@@ -9,13 +9,17 @@ if ~isempty(fsic(varargin, 'noiseRepsRatio'))
         error('%s: nReps * noiseRepsRatio = %f is not an integer', ...
               stage, nReps * noiseRepsRatio);
     end
-    if mod(1 / noiseRepsRatio, 1) ~= 0.0
+    if ~(mod(1 / noiseRepsRatio, 1) == 0.0 || noiseRepsRatio == 0)
         error('%s: 1 / noiseRepsRatio = %f is not an integer', ...
                stage, 1 / noiseRepsRatio);
     end
     
-    isRepNoise = repmat([zeros(1, 1 / noiseRepsRatio), 1], 1, nReps * noiseRepsRatio);    
-    nReps = nReps + nReps * noiseRepsRatio;
+    if noiseRepsRatio ~= 0
+        isRepNoise = repmat([zeros(1, 1 / noiseRepsRatio), 1], 1, nReps * noiseRepsRatio);    
+        nReps = nReps + nReps * noiseRepsRatio;
+    else
+        isRepNoise = zeros(1, nReps);
+    end
 else
     isRepNoise = zeros(1, nReps);
 end
